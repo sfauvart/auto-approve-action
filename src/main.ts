@@ -20,7 +20,7 @@ async function run() {
       owner: github.context.repo.owner,
       repo: github.context.repo.repo
     });
-    core.debug(JSON.stringify(pr_data.data.base));
+    core.debug(JSON.stringify(pr_data.data));
     // pr_data.data.base.ref
 
     await client.pulls.createReview({
