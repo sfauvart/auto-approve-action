@@ -5830,8 +5830,8 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput("github-token", { required: true });
-            const ref = core.getInput("github.ref", { required: true });
-            core.debug(ref);
+            const ref = process.env.GITHUB_REF;
+            core.debug(JSON.stringify(ref));
             const { pull_request: pr } = github.context.payload;
             if (!pr) {
                 throw new Error("Event payload missing `pull_request`");
