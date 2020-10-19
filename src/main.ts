@@ -23,13 +23,28 @@ async function run() {
     core.debug(JSON.stringify(pr_data.data));
     // pr_data.data.base.ref
 
-    await client.pulls.createReview({
-      owner: github.context.repo.owner,
-      repo: github.context.repo.repo,
-      pull_number: pr.number,
-      event: "APPROVE"
-    });
-    core.debug(`Approved pull request #${pr.number}`);
+    if (/^(hotfix|release)/.test(pr_data.data.head.ref)) {
+      await client.pulls.createReview({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        pull_number: pr.number,
+        event: "APPROVE"
+      });
+      core.debug(`Approved pull request #${pr.number}`);
+    } else {
+      await client.pulls.createReview({
+        owner: github.context.repo.owner,
+        repo: github.context.repo.repo,
+        pull_number: pr.number,
+        event: "COMMENT",
+        comments: [{
+          body: "Il faut faire valider par un humain",
+          path: "",
+          position: 1
+        }]
+      });
+      core.debug(`Not Approved pull request #${pr.number}`);
+    }
   } catch (error) {
     core.setFailed(error.message);
   }
