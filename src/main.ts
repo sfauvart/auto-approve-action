@@ -4,9 +4,9 @@ import * as github from "@actions/github";
 async function run() {
   try {
     const token = core.getInput("github-token", { required: true });
-    const ref = core.getInput("github.ref", { required: true });
+    const ref = process.env.GITHUB_REF;
 
-    core.debug(ref);
+    core.debug(JSON.stringify(ref));
 
     const { pull_request: pr } = github.context.payload;
     if (!pr) {
