@@ -5830,12 +5830,21 @@ function run() {
     return __awaiter(this, void 0, void 0, function* () {
         try {
             const token = core.getInput("github-token", { required: true });
+            const ref = core.getInput("github.ref", { required: true });
+            core.debug(ref);
             const { pull_request: pr } = github.context.payload;
             if (!pr) {
                 throw new Error("Event payload missing `pull_request`");
             }
             const client = github.getOctokit(token);
             core.debug(`Creating approving review for pull request #${pr.number}`);
+            const pr_data = yield client.pulls.get({
+                pull_number: pr.number,
+                owner: github.context.repo.owner,
+                repo: github.context.repo.repo
+            });
+            core.debug(JSON.stringify(pr_data.data.base));
+            // pr_data.data.base.ref
             yield client.pulls.createReview({
                 owner: github.context.repo.owner,
                 repo: github.context.repo.repo,
