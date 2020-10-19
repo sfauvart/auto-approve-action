@@ -5855,16 +5855,11 @@ function run() {
                 core.debug(`Approved pull request #${pr.number}`);
             }
             else {
-                yield client.pulls.createReview({
+                yield client.issues.createComment({
                     owner: github.context.repo.owner,
                     repo: github.context.repo.repo,
-                    pull_number: pr.number,
-                    event: "COMMENT",
-                    comments: [{
-                            body: "Il faut faire valider par un humain",
-                            path: "",
-                            position: 1
-                        }]
+                    issue_number: pr.number,
+                    body: "Il faut faire valider par un humain"
                 });
                 core.debug(`Not Approved pull request #${pr.number}`);
             }
